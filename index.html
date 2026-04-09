@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资源导航与知识库</title>
+    <!-- 引入字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SheetJS CDN，用于纯前端读取 Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 高饱和度光球环境光 (提升玻璃质感) -->
+    <div class="color-blob blob-1"></div>
+    <div class="color-blob blob-2"></div>
+    <div class="color-blob blob-3"></div>
+    <!-- 噪点纹理背景层 -->
+    <div class="noise-bg"></div>
+    
+    <div id="app" class="fade-up">
+        <header class="hero">
+            <!-- 顶部四标签导航对齐包装器 -->
+            <div class="top-nav-wrapper">
+                <nav class="top-nav">
+                    <button class="tag-pill active" data-tab="nav">精品导航</button>
+                    <button class="tag-pill" data-tab="articles">资料收集</button>
+                    <button class="tag-pill" data-tab="tools">工具下载</button>
+                    <button class="tag-pill" data-tab="policies">政策指南</button>
+                </nav>
+            </div>
+
+            <div class="header-content">
+                <h1 class="main-title">资源导航与知识库</h1>
+                
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="搜索资源、资料、工具、政策..." autocomplete="off">
+                    <button id="clearSearch" class="clear-btn" style="display: none;">&times;</button>
+                </div>
+            </div>
+        </header>
+
+        <main id="mainContent">
+            <!-- 动态分类导航区域 -->
+            <div id="categoryContainer" class="category-filters"></div>
+            <!-- 动态内容渲染区域 -->
+            <div id="contentArea" class="content-grid"></div>
+        </main>
+    </div>
+
+    <!-- 逻辑脚本拆分 -->
+    <!-- 1. 数据处理 (读取 Excel) -->
+    <script src="data.js"></script>
+    <!-- 2. UI 渲染视图组件 -->
+    <script src="render.js"></script>
+    <!-- 3. 搜索与过滤逻辑 -->
+    <script src="search.js"></script>
+    <!-- 4. 主控与交互流程 -->
+    <script src="main.js"></script>
+</body>
+</html>
