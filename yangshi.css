@@ -174,14 +174,29 @@ body {
 
 /* 移动端 (手机/小平板) 适配 */
 @media (max-width: 768px) {
-    /* 取消顶部导航的绝对定位溢出，改为普通的换行居中排版 */
+    /* 取消顶部导航的绝对定位溢出，强制单行显示，支持横向滑动 */
     .top-nav {
         position: static;
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
         margin-left: 0;
         margin-bottom: 0;
         margin-top: 10px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 5px; /* 留出一点滚动空间 */
+    }
+    
+    /* 隐藏顶部导航滚动条 */
+    .top-nav::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* 缩小导航按钮的尺寸，尽量让它全部停留在当前屏幕 */
+    .tag-pill {
+        padding: 6px 14px;
+        font-size: 0.85rem;
+        white-space: nowrap;
     }
     .top-nav-wrapper {
         height: auto;
