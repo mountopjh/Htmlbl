@@ -10,10 +10,10 @@ function setContent(html, layoutClass) {
     container.innerHTML = html;
 }
 
-// 1. 精品导航 (瀑布流布局 - Masonry)
-function renderNav(data) {
+// 1. 资料收集 (瀑布流布局 - Masonry)
+function renderArticles(data) {
     if(!data || data.length === 0) {
-        setContent('<p style="text-align:center;width:100%">暂无相关导航数据</p>', 'masonry-layout');
+        setContent('<p style="text-align:center;width:100%">暂无相关资料数据</p>', 'masonry-layout');
         return;
     }
     const html = data.map(item => {
@@ -29,37 +29,6 @@ function renderNav(data) {
     }).join('');
     setContent(html, 'masonry-layout');
 }
-
-// 2. 深度文章 (列表布局 - List)
-function renderArticles(data) {
-    if(!data || data.length === 0) {
-        setContent('<p style="text-align:center">暂无相关文章数据</p>', 'list-layout');
-        return;
-    }
-    const html = data.map((item, idx) => {
-        return `
-            <div class="card">
-                <h3 class="card-title"><a href="${item['链接'] || '#'}" target="_blank">${item['文章标题'] || '无标题'}</a></h3>
-                <div class="article-meta">发布日期: ${item['发布日期'] || '未知'} | 分类: ${item['分类'] || '无'}</div>
-                <button class="toggle-btn" onclick="toggleSummary(this)">查看摘要 ↓</button>
-                <div class="article-summary">${item['摘要'] || '暂无摘要'}</div>
-            </div>
-        `;
-    }).join('');
-    setContent(html, 'list-layout');
-}
-
-// 文章展开/收起特效
-window.toggleSummary = function(btn) {
-    const summary = btn.nextElementSibling;
-    if (summary.classList.contains('open')) {
-        summary.classList.remove('open');
-        btn.innerText = '查看摘要 ↓';
-    } else {
-        summary.classList.add('open');
-        btn.innerText = '收起摘要 ↑';
-    }
-};
 
 // 3. 工具下载 (网格布局 - Grid)
 function renderTools(data) {

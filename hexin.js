@@ -5,7 +5,7 @@
 
 // 全局应用状态
 const AppState = {
-    currentTab: 'nav',        // 默认显示精品导航
+    currentTab: 'articles',   // 默认显示资料收集
     currentSearch: '',        // 搜索关键字
     currentCategory: 'all'    // 当前选中的分类
 };
@@ -32,9 +32,7 @@ function updateContent() {
     activeData = filterDataByCategory(activeData, AppState.currentCategory);
     
     // 4. 根据当前 Tab 调用对应的渲染器
-    if (AppState.currentTab === 'nav') {
-        renderNav(activeData);
-    } else if (AppState.currentTab === 'articles') {
+    if (AppState.currentTab === 'articles') {
         renderArticles(activeData);
     } else if (AppState.currentTab === 'tools') {
         renderTools(activeData);
@@ -72,6 +70,12 @@ function bindEvents() {
     DOM.tabBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             const targetTab = e.target.dataset.tab;
+            
+            // 点击“首页导航”直接回归原始默认页面
+            if (targetTab === 'home') {
+                window.location.reload();
+                return;
+            }
             
             // 要求：再次点击同一标签可回到首页 (重置搜索与过滤)
             if (AppState.currentTab === targetTab) {

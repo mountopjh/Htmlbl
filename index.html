@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- SheetJS CDN，用于纯前端读取 Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="yangshi.css">
 </head>
 <body>
     <!-- 高饱和度光球环境光 (提升玻璃质感) -->
@@ -20,11 +20,11 @@
     
     <div id="app" class="fade-up">
         <header class="hero">
-            <!-- 顶部四标签导航对齐包装器 -->
+            <!-- 顶部多标签导航对齐包装器 -->
             <div class="top-nav-wrapper">
                 <nav class="top-nav">
-                    <button class="tag-pill active" data-tab="nav">精品导航</button>
-                    <button class="tag-pill" data-tab="articles">资料收集</button>
+                    <button class="tag-pill" data-tab="home">首页导航</button>
+                    <button class="tag-pill active" data-tab="articles">资料收集</button>
                     <button class="tag-pill" data-tab="tools">工具下载</button>
                     <button class="tag-pill" data-tab="policies">政策指南</button>
                 </nav>
@@ -50,12 +50,12 @@
 
     <!-- 逻辑脚本拆分 -->
     <!-- 1. 数据处理 (读取 Excel) -->
-    <script src="data.js"></script>
+    <script src="shuju.js"></script>
     <!-- 2. UI 渲染视图组件 -->
-    <script src="render.js"></script>
+    <script src="xuanran.js"></script>
     <!-- 3. 搜索与过滤逻辑 -->
-    <script src="search.js"></script>
+    <script src="sousuo.js"></script>
     <!-- 4. 主控与交互流程 -->
-    <script src="main.js"></script>
+    <script src="hexin.js"></script>
 </body>
 </html>

@@ -6,14 +6,12 @@
 // 统一数据状态管理
 const DataStore = {
     // 原始数据队列
-    nav: [],
     articles: [],
     tools: [],
     policies: [],
     
     // 去重分类保存集合
     categories: {
-        nav: new Set(),
         articles: new Set(),
         tools: new Set(),
         policies: new Set()
@@ -59,14 +57,12 @@ async function loadExcelFile(filename) {
  * 初始化所有数据，收集分类
  */
 async function initData() {
-    const [nav, articles, tools, policies] = await Promise.all([
-        loadExcelFile('nav.xlsx'),
-        loadExcelFile('articles.xlsx'),
-        loadExcelFile('tools.xlsx'),
-        loadExcelFile('policies.xlsx')
+    const [articles, tools, policies] = await Promise.all([
+        loadExcelFile('01ziliaoshouji.xlsx'),
+        loadExcelFile('02gongjuxiazai.xlsx'),
+        loadExcelFile('03zhengcezhinan.xlsx')
     ]);
 
-    DataStore.nav = nav;
     DataStore.articles = articles;
     DataStore.tools = tools;
     DataStore.policies = policies;
@@ -81,7 +77,6 @@ async function initData() {
         });
     };
 
-    extractCategories(DataStore.nav, DataStore.categories.nav);
     extractCategories(DataStore.articles, DataStore.categories.articles);
     extractCategories(DataStore.tools, DataStore.categories.tools);
     extractCategories(DataStore.policies, DataStore.categories.policies);
