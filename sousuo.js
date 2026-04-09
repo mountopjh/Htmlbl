@@ -15,7 +15,13 @@ function filterDataByKeyword(data, keyword) {
         // 提取并拼接对象中所有的值进行检索
         return Object.values(item).some(val => {
             if (val === null || val === undefined) return false;
-            return String(val).toLowerCase().includes(lowerKey);
+            const strVal = String(val);
+            if (strVal.toLowerCase().includes(lowerKey)) return true;
+            // 如果引入了并存在拼音匹配库，则通过拼音匹配搜索
+            if (typeof PinyinMatch !== 'undefined' && PinyinMatch.match(strVal, keyword)) {
+                return true;
+            }
+            return false;
         });
     });
 }

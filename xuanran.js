@@ -10,13 +10,10 @@ function setContent(html, layoutClass) {
     container.innerHTML = html;
 }
 
-// 1. 资料收集 (瀑布流布局 - Masonry)
-function renderArticles(data) {
-    if(!data || data.length === 0) {
-        setContent('<p style="text-align:center;width:100%">暂无相关资料数据</p>', 'masonry-layout');
-        return;
-    }
-    const html = data.map(item => {
+// 提取资料列表的HTML
+function getArticlesHtml(data) {
+    if(!data || data.length === 0) return '';
+    return data.map(item => {
         const tags = (item['标签'] || '').split(',').filter(t => t.trim() !== '');
         const tagHtml = tags.map(t => `<span class="tag">${t.trim()}</span>`).join('');
         return `
@@ -27,16 +24,22 @@ function renderArticles(data) {
             </a>
         `;
     }).join('');
-    setContent(html, 'masonry-layout');
 }
 
-// 3. 工具下载 (网格布局 - Grid)
-function renderTools(data) {
-    if(!data || data.length === 0) {
-        setContent('<p style="text-align:center;grid-column:1/-1">暂无相关工具数据</p>', 'grid-layout');
-        return;
+// 1. 资料收集 (瀑布流布局 - Masonry)
+function renderArticles(data) {
+    const html = getArticlesHtml(data);
+    if (!html) {
+        setContent('<p style="text-align:center;width:100%">暂无相关资料数据</p>', 'masonry-layout');
+    } else {
+        setContent(html, 'masonry-layout');
     }
-    const html = data.map(item => {
+}
+
+// 提取工具列表的HTML
+function getToolsHtml(data) {
+    if(!data || data.length === 0) return '';
+    return data.map(item => {
         const iconSrc = item['图标URL'] && item['图标URL'].trim() !== '';
         const iconHtml = iconSrc 
             ? `<img src="${item['图标URL']}" alt="icon" style="width:100%;height:100%;border-radius:12px;object-fit:cover;">` 
@@ -59,24 +62,28 @@ function renderTools(data) {
             </div>
         `;
     }).join('');
-    setContent(html, 'grid-layout');
 }
 
-// 4. 政策指南 (时间线布局 - Timeline)
-function renderPolicies(data) {
-    if(!data || data.length === 0) {
-        setContent('<p style="text-align:center">暂无相关政策数据</p>', 'timeline-layout');
-        return;
+// 3. 工具下载 (网格布局 - Grid)
+function renderTools(data) {
+    const html = getToolsHtml(data);
+    if (!html) {
+        setContent('<p style="text-align:center;grid-column:1/-1">暂无相关工具数据</p>', 'grid-layout');
+    } else {
+        setContent(html, 'grid-layout');
     }
-    
-    // 按年份进行分组
+}
+
+// 提取政策指南的HTML
+function getPoliciesHtml(data) {
+    if(!data || data.length === 0) return '';
     let groupedHtml = '';
     let currentYear = null;
     
     data.forEach(item => {
         const year = item['年份'] || '未知年份';
         if (year !== currentYear) {
-            groupedHtml += `<h2 class="policy-year">${year}</h2>`;
+            groupedHtml += `<h2 class="policy-year" style="width:100%;">${year}</h2>`;
             currentYear = year;
         }
         groupedHtml += `
@@ -89,8 +96,46 @@ function renderPolicies(data) {
             </div>
         `;
     });
+    return groupedHtml;
+}
+
+// 4. 政策指南 (时间线布局 - Timeline)
+function renderPolicies(data) {
+    const html = getPoliciesHtml(data);
+    if (!html) {
+        setContent('<p style="text-align:center;width:100%">暂无相关政策数据</p>', 'timeline-layout');
+    } else {
+        setContent(html, 'timeline-layout');
+    }
+}
+
+// 全局聚合搜索渲染
+function renderGlobalSearch(sArticles, sTools, sPolicies) {
+    let html = '';
     
-    setContent(groupedHtml, 'timeline-layout');
+    const hArticles = getArticlesHtml(sArticles);
+    if (hArticles) {
+        html += '<h2 style="width:100%;color:white;margin:20px 0;grid-column:1/-1;">资料收集</h2>';
+        html += '<div class="masonry-layout" style="width:100%;grid-column:1/-1;">' + hArticles + '</div>';
+    }
+    
+    const hTools = getToolsHtml(sTools);
+    if (hTools) {
+        html += '<h2 style="width:100%;color:white;margin:20px 0;grid-column:1/-1;">工具下载</h2>';
+        html += '<div class="grid-layout" style="width:100%;grid-column:1/-1;">' + hTools + '</div>';
+    }
+    
+    const hPolicies = getPoliciesHtml(sPolicies);
+    if (hPolicies) {
+        html += '<h2 style="width:100%;color:white;margin:20px 0;grid-column:1/-1;">政策指南</h2>';
+        html += '<div class="timeline-layout" style="width:100%;grid-column:1/-1;">' + hPolicies + '</div>';
+    }
+    
+    if (!html) {
+        html = '<p style="text-align:center;width:100%;grid-column:1/-1;color:rgba(255,255,255,0.7);margin-top:40px;">暂无匹配结果</p>';
+    }
+    
+    setContent(html, 'grid-layout'); // 使用 grid-layout 作为外部包容容器，让子元素可以以 block 形式展现
 }
 
 // 动态渲染分类按钮 (顶部过滤器)

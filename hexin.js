@@ -5,7 +5,7 @@
 
 // 全局应用状态
 const AppState = {
-    currentTab: 'articles',   // 默认显示资料收集
+    currentTab: 'home',   // 默认显示首页导航（只保留搜索框）
     currentSearch: '',        // 搜索关键字
     currentCategory: 'all'    // 当前选中的分类
 };
@@ -22,7 +22,30 @@ const DOM = {
  * 更新内容区，组合分类过滤和文本搜索
  */
 function updateContent() {
-    // 1. 获取当前激活的标签页数据
+    // 处理首页的特例（全局搜索）
+    if (AppState.currentTab === 'home') {
+        const catContainer = document.getElementById('categoryContainer');
+        catContainer.innerHTML = ''; // 首页不需要原本的具体分类按钮
+        
+        if (!AppState.currentSearch) {
+            // 没有输入任何内容时，保持纯净的搜索框环境
+            document.getElementById('contentArea').className = 'content-grid';
+            document.getElementById('contentArea').innerHTML = '';
+            return;
+        } else {
+            // 全局搜索触发
+            const sArticles = filterDataByKeyword(DataStore.articles, AppState.currentSearch);
+            const sTools = filterDataByKeyword(DataStore.tools, AppState.currentSearch);
+            const sPolicies = filterDataByKeyword(DataStore.policies, AppState.currentSearch);
+            
+            if (typeof renderGlobalSearch === 'function') {
+                renderGlobalSearch(sArticles, sTools, sPolicies);
+            }
+            return;
+        }
+    }
+
+    // 其他 Tab 的正常处理逻辑
     let activeData = DataStore[AppState.currentTab] || [];
     
     // 2. 将数据过一遍搜索词过滤
@@ -45,18 +68,22 @@ function updateContent() {
  * 切换标签并重新布置分类过滤器
  */
 function renderCurrentView() {
-    // 渲染该标签下的所有分类并挂载到 DOM
-    renderCategories(DataStore.categories[AppState.currentTab]);
-    
-    // 为动态生成的分类按钮绑定点击事件
-    document.querySelectorAll('.cat-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            AppState.currentCategory = e.target.dataset.cat;
-            updateContent();
+    if (AppState.currentTab !== 'home') {
+        // 渲染该标签下的所有分类并挂载到 DOM
+        renderCategories(DataStore.categories[AppState.currentTab]);
+        
+        // 为动态生成的分类按钮绑定点击事件
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                AppState.currentCategory = e.target.dataset.cat;
+                updateContent();
+            });
         });
-    });
+    } else {
+        document.getElementById('categoryContainer').innerHTML = '';
+    }
 
     // 最后触发内容刷新
     updateContent();
@@ -70,12 +97,6 @@ function bindEvents() {
     DOM.tabBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             const targetTab = e.target.dataset.tab;
-            
-            // 点击“首页导航”直接回归原始默认页面
-            if (targetTab === 'home') {
-                window.location.reload();
-                return;
-            }
             
             // 要求：再次点击同一标签可回到首页 (重置搜索与过滤)
             if (AppState.currentTab === targetTab) {

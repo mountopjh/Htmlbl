@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- SheetJS CDN，用于纯前端读取 Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- PinyinMatch CDN，用于拼音模糊搜索 -->
+    <script src="https://cdn.jsdelivr.net/npm/pinyin-match/dist/main.js"></script>
     <link rel="stylesheet" href="yangshi.css">
 </head>
 <body>
@@ -23,8 +25,8 @@
             <!-- 顶部多标签导航对齐包装器 -->
             <div class="top-nav-wrapper">
                 <nav class="top-nav">
-                    <button class="tag-pill" data-tab="home">首页导航</button>
-                    <button class="tag-pill active" data-tab="articles">资料收集</button>
+                    <button class="tag-pill active" data-tab="home">首页导航</button>
+                    <button class="tag-pill" data-tab="articles">资料收集</button>
                     <button class="tag-pill" data-tab="tools">工具下载</button>
                     <button class="tag-pill" data-tab="policies">政策指南</button>
                 </nav>
