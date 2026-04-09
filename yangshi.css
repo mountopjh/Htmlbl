@@ -171,3 +171,70 @@ body {
     border-radius: 50%; background: var(--theme-color); border: 2px solid #fff; box-shadow: var(--glass-shadow);
 }
 .policy-year { font-weight: bold; color: var(--theme-color); margin-bottom: 5px; font-size: 1.1rem; }
+
+/* 移动端 (手机/小平板) 适配 */
+@media (max-width: 768px) {
+    /* 取消顶部导航的绝对定位溢出，改为普通的换行居中排版 */
+    .top-nav {
+        position: static;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-left: 0;
+        margin-bottom: 0;
+        margin-top: 10px;
+    }
+    .top-nav-wrapper {
+        height: auto;
+    }
+    
+    /* 缩小标题和调整间距 */
+    .main-title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    .header-content {
+        padding: 20px 0;
+    }
+    
+    /* 缩小最外层边距 */
+    #app {
+        padding: 10px;
+    }
+    
+    /* 分类按钮支持横向溢出滚动，以免太挤换行太长 */
+    .category-filters {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 10px;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* 滚动条隐藏，保持美观 */
+    .category-filters::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* 强制所有瀑布流和网格变成单列，提升手机可读性 */
+    .masonry-layout {
+        columns: 1;
+    }
+    .grid-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    /* 减少卡片的内边距和整体外边距 */
+    .card {
+        padding: 16px;
+        margin-bottom: 15px;
+    }
+    .content-grid {
+        margin-bottom: 30px;
+    }
+    
+    /* 调整搜索框在手机上的体积 */
+    #searchInput {
+        font-size: 1rem;
+        padding: 12px 36px 12px 20px;
+    }
+}
